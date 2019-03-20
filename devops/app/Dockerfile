@@ -16,8 +16,8 @@ ARG HOME=/app
 RUN adduser -u $UID -s /bin/bash -D -h $HOME $USER
 
 # install persistent dependencies
-RUN apk add --update --no-cache postgresql-dev gcc musl-dev make libxslt-dev \
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev
+RUN apk add --update --no-cache postgresql-dev gcc musl-dev make libxslt-dev
+#    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev #  Pillow
 
 # install temporary dependencies
 RUN apk add --update --no-cache --virtual .build-deps \

@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3"
 networks:
   backend:
     driver: ${NETWORKS_DRIVER}
@@ -10,8 +10,10 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   postgres:
     driver: ${VOLUMES_DRIVER}
-  redis_queue:
+  redis:
     driver: ${VOLUMES_DRIVER}
+#  rabbitmq:
+#    driver: ${VOLUMES_DRIVER}
 
 services:
 ### Backend Server #########################################
@@ -31,11 +33,18 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - SUPERVISOR_USERNAME=${SUPERVISOR_USERNAME}
+      - SUPERVISOR_PASSWORD=${SUPERVISOR_PASSWORD}
     networks:
       - backend
     depends_on:
-      - redis_queue
+      - redis
       - postgres
+    sysctls:
+      - net.ipv4.tcp_keepalive_time=1800
+      - net.ipv4.tcp_keepalive_intvl=15
+      - net.ipv4.tcp_keepalive_probes=5
 
 ### NGINX Server #########################################
   nginx:
@@ -72,9 +81,27 @@ services:
       - backend
 
 ### Redis queue ################################################
-  redis_queue:
-    build: ./redis_queue
+  redis:
+    build: ./redis
     volumes:
-      - redis_queue:/data
+      - redis:/data
     networks:
       - backend
+
+### RabbitMQ ################################################
+#  rabbitmq:
+#    hostname: "rabbitmq"
+#    build: ./rabbitmq
+#    volumes:
+#      - rabbitmq:/var/lib/rabbitmq
+#    ports:
+#      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+#    environment:
+#      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+#      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+#    networks:
+#      - backend
+#    sysctls:
+#      - net.ipv4.tcp_keepalive_time=600
