@@ -207,7 +207,7 @@ CELERY_TASK_ROUTES = (
         'apps.match.tasks.*': {'queue': 'match'},
     }
 )
-CELERY_TASK_QUEUE_HA_POLICY = {'all'}  # RabbitMQ
+CELERY_TASK_QUEUE_HA_POLICY = None  # RabbitMQ
 CELERY_TASK_QUEUE_MAX_PRIORITY = None  # RabbitMQ
 # CELERY_WORKER_DIRECT = False
 CELERY_TASK_CREATE_MISSING_QUEUES = True
@@ -222,7 +222,7 @@ CELERY_BROKER_URL = env.str('CELERY_BROKER_URL', default='amqp://')
 # CELERY_BROKER_READ_URL = 'amqp://user:pass@broker.example.com:56721'
 # CELERY_BROKER_WRITE_URL = 'amqp://user:pass@broker.example.com:56722'
 CELERY_BROKER_FAILOVER_STRATEGY = 'round-robin'
-CELERY_BROKER_HEARTBEAT = 10.0
+CELERY_BROKER_HEARTBEAT = 120.0
 CELERY_BROKER_HEARTBEAT_CHECKRATE = 2.0
 # CELERY_BROKER_USE_SSL = {
 #   'keyfile': '/var/ssl/private/worker-key.pem',
