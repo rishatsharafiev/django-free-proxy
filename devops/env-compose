@@ -14,7 +14,7 @@ APP_UPSTREAM_PORT=5000
 
 # celery
 CELERY_FLOWER_PORT=9002
-CELERY_BROKER_URL=redis://redis:6379/0
+CELERY_BROKER_URL=amqp://default:default@rabbitmq:5672/default
 
 # nginx
 NGINX_HOST_HTTP_PORT=8000
@@ -28,7 +28,7 @@ POSTGRES_PASSWORD=default
 POSTGRES_HOST=postgres
 POSTGRES_PORT=54321
 
-# redis queue
+# redis
 
 # rabbitmq
 #RABBITMQ_ERLANG_COOKIE=FHODXBGHNNCOMSFRIZAM
